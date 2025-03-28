@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { BookOpen, CheckCircle, Star } from 'lucide-react';
+import { BookOpen, CheckCircle, Star, GraduationCap } from 'lucide-react';
 
 const Hero = () => {
   return (
