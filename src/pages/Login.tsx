@@ -1,14 +1,39 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GraduationCap, Mail, Lock, BookOpen, BrainCircuit } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { toast } from "@/components/ui/use-toast";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Simulate authentication
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      // For demo purposes, we'll allow any login
+      toast({
+        title: "Login successful",
+        description: "Welcome back to KariWise!",
+      });
+      
+      // Navigate to dashboard
+      navigate('/dashboard');
+    }, 1500);
+  };
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left side - illustration */}
@@ -82,13 +107,21 @@ const Login = () => {
               </div>
               
               {/* Email login form */}
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="email" placeholder="name@example.com" className="pl-10" />
+                      <Input 
+                        id="email" 
+                        type="email"
+                        placeholder="name@example.com" 
+                        className="pl-10" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
                     </div>
                   </div>
                   
@@ -101,7 +134,15 @@ const Login = () => {
                     </div>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="password" type="password" placeholder="••••••••" className="pl-10" />
+                      <Input 
+                        id="password" 
+                        type="password" 
+                        placeholder="••••••••" 
+                        className="pl-10" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
                     </div>
                   </div>
                   
@@ -110,8 +151,8 @@ const Login = () => {
                     <Label htmlFor="remember" className="text-sm">Remember me</Label>
                   </div>
                   
-                  <Button type="submit" className="w-full">
-                    Log in
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Logging in..." : "Log in"}
                   </Button>
                 </div>
               </form>

@@ -11,6 +11,13 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+import DashboardLayout from "./components/DashboardLayout";
+import Dashboard from "./pages/dashboard/Index";
+import AiTutor from "./pages/dashboard/AiTutor";
+import Quizzes from "./pages/dashboard/Quizzes";
+import Results from "./pages/dashboard/Results";
+import Progress from "./pages/dashboard/Progress";
+import Resources from "./pages/dashboard/Resources";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +34,17 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          
+          {/* Dashboard routes */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="ai-tutor" element={<AiTutor />} />
+            <Route path="quizzes" element={<Quizzes />} />
+            <Route path="results" element={<Results />} />
+            <Route path="progress" element={<Progress />} />
+            <Route path="resources" element={<Resources />} />
+          </Route>
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

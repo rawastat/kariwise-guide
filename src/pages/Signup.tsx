@@ -1,15 +1,31 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { GraduationCap, User, Mail, Lock, CheckCircle, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from "@/components/ui/use-toast";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    age: '',
+    grade: '',
+    board: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
   
   const nextStep = () => {
     setStep(step + 1);
@@ -17,6 +33,24 @@ const Signup = () => {
   
   const prevStep = () => {
     setStep(step - 1);
+  };
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Simulate registration
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      toast({
+        title: "Account created successfully",
+        description: "Welcome to KariWise learning platform!",
+      });
+      
+      // Navigate to dashboard
+      navigate('/dashboard');
+    }, 1500);
   };
   
   return (
@@ -40,81 +74,143 @@ const Signup = () => {
                 <TabsTrigger value="google">Google</TabsTrigger>
               </TabsList>
               <TabsContent value="email">
-                {step === 1 && (
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input id="name" placeholder="Enter your full name" className="pl-10" />
+                <form onSubmit={handleSubmit}>
+                  {step === 1 && (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input 
+                            id="name" 
+                            placeholder="Enter your full name" 
+                            className="pl-10" 
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input id="email" placeholder="name@example.com" className="pl-10" />
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input 
+                            id="email" 
+                            type="email"
+                            placeholder="name@example.com" 
+                            className="pl-10" 
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input id="password" type="password" placeholder="Create a strong password" className="pl-10" />
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input 
+                            id="password" 
+                            type="password" 
+                            placeholder="Create a strong password" 
+                            className="pl-10" 
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Password must be at least 8 characters and include a number and a special character.
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Password must be at least 8 characters and include a number and a special character.
-                      </p>
-                    </div>
-                    
-                    <Button onClick={nextStep} className="w-full">
-                      Continue <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                )}
-                
-                {step === 2 && (
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="age">Age</Label>
-                      <Input id="age" type="number" placeholder="Enter your age" />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="grade">Class/Grade</Label>
-                      <Input id="grade" placeholder="e.g., 10th, 12th, College 1st year" />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="board">Education Board</Label>
-                      <select 
-                        id="board" 
-                        className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      
+                      <Button 
+                        type="button" 
+                        onClick={nextStep} 
+                        className="w-full"
                       >
-                        <option value="">Select your education board</option>
-                        <option value="CBSE">CBSE</option>
-                        <option value="ICSE">ICSE</option>
-                        <option value="State Board">State Board</option>
-                        <option value="College">College/University</option>
-                      </select>
-                    </div>
-                    
-                    <div className="flex justify-between">
-                      <Button variant="outline" onClick={prevStep}>
-                        Back
-                      </Button>
-                      <Button type="submit">
-                        Create Account
+                        Continue <ChevronRight className="ml-2 h-4 w-4" />
                       </Button>
                     </div>
-                  </div>
-                )}
+                  )}
+                  
+                  {step === 2 && (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="age">Age</Label>
+                        <Input 
+                          id="age" 
+                          type="number" 
+                          placeholder="Enter your age" 
+                          value={formData.age}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="grade">Class/Grade</Label>
+                        <Input 
+                          id="grade" 
+                          placeholder="e.g., 10th, 12th, College 1st year" 
+                          value={formData.grade}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="board">Education Board</Label>
+                        <select 
+                          id="board" 
+                          className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          value={formData.board}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Select your education board</option>
+                          <option value="CBSE">CBSE</option>
+                          <option value="ICSE">ICSE</option>
+                          <option value="State Board">State Board</option>
+                          <option value="College">College/University</option>
+                        </select>
+                      </div>
+                      
+                      <div className="flex justify-between">
+                        <Button 
+                          variant="outline" 
+                          type="button"
+                          onClick={prevStep}
+                        >
+                          Back
+                        </Button>
+                        <Button 
+                          type="submit"
+                          disabled={isLoading}
+                        >
+                          {isLoading ? "Creating Account..." : "Create Account"}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </form>
               </TabsContent>
               <TabsContent value="google">
                 <div className="space-y-4">
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => {
+                      toast({
+                        title: "Google Sign-up",
+                        description: "Redirecting to Google authentication...",
+                      });
+                      setTimeout(() => navigate('/dashboard'), 1500);
+                    }}
+                  >
                     <svg className="mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                       <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
                       <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
