@@ -126,6 +126,62 @@
   .animation-delay-700 {
     animation-delay: 700ms;
   }
+
+  /* Enhanced 3D card with glass effect */
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-xl border border-white/30 rounded-xl overflow-hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .glass-card:hover {
+    transform: translateY(-10px) perspective(1000px) rotateX(2deg) rotateY(2deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Futuristic button style */
+  .btn-futuristic {
+    @apply relative overflow-hidden bg-gradient-to-r from-education-primary to-education-secondary text-white px-6 py-3 rounded-lg;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-futuristic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+  }
+  
+  .btn-futuristic:hover::before {
+    left: 100%;
+  }
+  
+  /* Animated border */
+  .animated-border {
+    position: relative;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+  
+  .animated-border::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    z-index: -1;
+    background: linear-gradient(45deg, #6366F1, #06B6D4, #F97316, #6366F1);
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease infinite;
+    border-radius: 0.85rem;
+  }
 }
 
 @layer utilities {
@@ -169,5 +225,48 @@
   .animate-fade-in {
     animation: fade-in 0.8s ease-out forwards;
     opacity: 0;
+  }
+
+  /* Typing animation for text */
+  .typing-animation {
+    border-right: 2px solid;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    animation: typing 3.5s steps(40, end) forwards, blink 1s step-end infinite;
+  }
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+
+  @keyframes blink {
+    from, to { border-color: transparent }
+    50% { border-color: currentColor }
+  }
+  
+  /* Gradient animation */
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+  
+  .bg-gradient-animate {
+    background: linear-gradient(-45deg, #6366F1, #06B6D4, #F97316, #6366F1);
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease infinite;
+  }
+  
+  /* 3D depth effect */
+  .depth-1 { transform: translateZ(20px); }
+  .depth-2 { transform: translateZ(40px); }
+  .depth-3 { transform: translateZ(60px); }
+  
+  /* Perspective container */
+  .perspective-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
   }
 }
