@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { 
   Bot, 
   BookText, 
@@ -58,14 +58,40 @@ const features = [
 ];
 
 const Features = () => {
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    cardsRef.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
+
+    return () => {
+      cardsRef.current.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
+    };
+  }, []);
+
   return (
     <section className="py-24 relative" id="features">
+      {/* Animated background */}
       <div className="absolute inset-0 bg-dot-pattern -z-10 opacity-30"></div>
-      <div className="absolute top-1/4 left-0 w-72 h-72 bg-education-secondary/20 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-education-primary/20 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-education-secondary/20 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
+      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-education-primary/20 rounded-full blur-3xl -z-10 animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Powerful <span className="text-gradient">AI Features</span> for Students
           </h2>
@@ -76,15 +102,26 @@ const Features = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
-            <Card key={index} className="glassmorphism border-0 hover:shadow-lg transition-all duration-300">
-              <CardHeader>
-                <div className="mb-3">{feature.icon}</div>
-                <CardTitle>{feature.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base">{feature.description}</CardDescription>
-              </CardContent>
-            </Card>
+            <div 
+              key={index} 
+              ref={(el) => (cardsRef.current[index] = el)}
+              className="feature-card opacity-0 translate-y-10"
+              style={{ transitionDelay: `${index * 100}ms` }}
+            >
+              <Card className="neo-glassmorphism border-0 hover:shadow-xl transition-all duration-500 overflow-hidden group h-full">
+                <div className="absolute -inset-1 bg-gradient-to-r from-education-primary/10 via-education-secondary/10 to-education-accent/10 blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <CardHeader>
+                  <div className="relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-education-primary/20 to-education-secondary/20 mb-3 group-hover:scale-110 transition-transform duration-500">
+                    <div className="absolute inset-0.5 rounded-xl bg-white/50 dark:bg-black/50 blur-sm"></div>
+                    <div className="relative z-10">{feature.icon}</div>
+                  </div>
+                  <CardTitle className="relative z-10 group-hover:text-gradient transition-all duration-300">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base relative z-10">{feature.description}</CardDescription>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +40,26 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Feature card animations */
+.feature-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.feature-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 3D hover effect for cards */
+.neo-glassmorphism {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.neo-glassmorphism:hover {
+  transform: translateY(-5px) perspective(1000px) rotateX(2deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
 }
