@@ -182,6 +182,55 @@
     animation: gradient-shift 8s ease infinite;
     border-radius: 0.85rem;
   }
+  
+  /* 3D grid pattern */
+  .grid-pattern {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: center center;
+  }
+  
+  /* Futuristic gradient overlay */
+  .gradient-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .gradient-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(145deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 50%, rgba(6, 182, 212, 0.1) 100%);
+    pointer-events: none;
+  }
+  
+  /* Particle animation */
+  .particle {
+    opacity: 0.6;
+    position: absolute;
+    transition: transform 0.2s ease-out;
+  }
+  
+  /* 3D Hover Effect */
+  .hover-3d {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  
+  .hover-3d:hover {
+    transform: translateY(-5px) perspective(1000px) rotateX(2deg);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Background gradient for education */
+  .bg-gradient-education {
+    @apply bg-gradient-to-r from-education-primary to-education-secondary;
+  }
 }
 
 @layer utilities {
@@ -268,5 +317,45 @@
   .perspective-container {
     perspective: 1000px;
     transform-style: preserve-3d;
+  }
+  
+  /* Holographic effect */
+  .holographic {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .holographic::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.05) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(45deg);
+    pointer-events: none;
+    animation: holographic-shift 3s linear infinite;
+  }
+  
+  @keyframes holographic-shift {
+    0% { transform: rotate(0deg) translate(-50%, -50%); }
+    100% { transform: rotate(360deg) translate(-50%, -50%); }
+  }
+  
+  /* Neon glow */
+  .neon-glow {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3), 0 0 30px rgba(99, 102, 241, 0.1);
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 5px rgba(99, 102, 241, 0.5), 0 0 10px rgba(99, 102, 241, 0.3);
   }
 }
